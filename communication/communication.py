@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 model = nengo.Network(label="Communication Channel")
 
 with model:
-    sin = nengo.Node(np.sin)
+    sin = nengo.Node(lambda x: np.sin(2*np.pi*x))
 
     A = nengo.Ensemble(100, dimensions=1)
     B = nengo.Ensemble(100, dimensions=1)
