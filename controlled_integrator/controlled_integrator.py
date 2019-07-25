@@ -48,3 +48,30 @@ with model:
 
 with nengo.Simulator(model) as sim:
     sim.run(1.4)
+
+t = sim.trange()
+dt = t[1] - t[0]
+
+input_sig = input_func.run(t[-1], dt=dt)
+control_sig = control_func.run(t[-1], dt=dt)
+ref = dt*np.cumsum(input_sig)
+
+plt.figure(figsize=(6, 8))
+plt.subplot(2, 1, 1)
+plt.plot(t, input_sig, label="input")
+plt.xlim(right=t[-1])
+plt.ylim(-11, 11)
+plt.ylabel("input")
+plt.legend(loc="lower left", frameon=False)
+
+plt.subplot(2, 1, 2)
+plt.plot(t, ref, "k--", label="exact")
+plt.plot(t, sim.data[A_probe][:, 0], label="A (value)")
+plt.plot(t, sim.data[A_probe][:, 1], label="A (control)")
+plt.xlim(right=t[-1])
+plt.ylim(-1.1, 1.1)
+plt.xlabel("Time (s)")
+plt.ylabel("x(t)")
+plt.legend(loc="lower left", frameon=False)
+
+plt.show()
